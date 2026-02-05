@@ -1,0 +1,33 @@
+\documentclass[11pt]{article}
+
+% --- Packages ---
+\usepackage[utf8]{inputenc} % Character encoding
+\usepackage{geometry}       % Page margins
+\geometry{letterpaper, margin=1in}
+\usepackage{graphicx}       % For inserting images
+\usepackage{amsmath}        % For math symbols
+
+% --- Info ---
+\title{Decision Tree}
+\author{Ludo Huand, Grudet Augustin}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+This is where your text begins. You can easily add \textbf{bold text}, \textit{italics}, or even a footnote\footnote{Like this one.}.
+
+\section{Notes}
+ID3 (Iterative Dichotomiser 3) algo le plus connu pour la génération d'arbre de décision, développé par Ross Quinlan en 1989. \\
+On veut comparer deux critères :
+\begin{itemize}
+    \item Gini = $1 - \sum_{i=1}^n p_i^2$ avec $p_i$ proba de la classe $i$.
+    \item Entropie = $- \sum_{i=1}^n p_i \ln{p_i}$ avec $p_i$ proba de la classe $i$.
+\end{itemize}
+
+\section{Ressources en vrac}
+
+
+\end{document}
