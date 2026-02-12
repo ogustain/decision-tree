@@ -1,8 +1,8 @@
-PWD /Users/augustin/Documents/Areas/Cours/1A/S6/TC66/decision_tree/livrables
+PWD /Users/augustin/Documents/Areas/Cours/1A/S6/TC66/decision-tree/livrables
 INPUT /usr/local/texlive/2025/texmf.cnf
 INPUT /usr/local/texlive/2025/texmf-dist/web2c/texmf.cnf
 INPUT /usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt
-INPUT /Users/augustin/Documents/Areas/Cours/1A/S6/TC66/decision_tree/livrables/rapport.tex
+INPUT /Users/augustin/Documents/Areas/Cours/1A/S6/TC66/decision-tree/livrables/rapport.tex
 OUTPUT rapport.log
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/base/article.cls
 INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/base/article.cls
