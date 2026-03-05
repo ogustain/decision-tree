@@ -6,6 +6,7 @@
 \geometry{letterpaper, margin=1in}
 \usepackage{graphicx}       % For inserting images
 \usepackage{amsmath}        % For math symbols
+\usepackage{hyperref}
 
 % --- Info ---
 \title{Decision Tree}
@@ -27,9 +28,16 @@ On veut comparer deux critères :
     \item Entropie = $- \sum_{i=1}^n p_i \ln{p_i}$ avec $p_i$ proba de la classe $i$.
 \end{itemize}
 
-Bon j'ai un problème avec des données "continues" genre s'il faut faire un arbre avec l'âge comme feature. Faut-il faire une regression ? Faut-il essayer de fixer des ranges ?
+Bon j'ai un problème avec des données "continues" genre s'il faut faire un arbre avec l'âge comme feature. Faut-il faire une regression ? Faut-il essayer de fixer des ranges ? Visiblement le problème vient de ID3 dans sa forme initiale, il faut modifier l'algo / implémenter un autre (C4.5, CART, etc.).
+Ce qui change avec CART par rapport à ID3 c'est qu'on distingue les valeurs catégoriques et numériques. Lorsque les valeurs sont numériques, on fait un genre de dichotomie en divisant successivement le dataset en deux et on calcul le gain pour trouver la meilleure division
 
 \section{Ressources en vrac}
+
+\begin{itemize}
+	\item \url{https://hunch.net/~coms-4771/quinlan.pdf} (ID3)
+	\item Breiman, L., J. Friedman, R. Olshen, and C. Stone. 1984. Classification and Regression Trees. New York: Wadsworth Publishing. (CART)
+	\item \url{https://mbrenndoerfer.com/writing/cart-decision-trees-classification-regression-mathematical-foundations-python-implementation#visualizing-cart}
+\end{itemize}
 
 
 \end{document}
