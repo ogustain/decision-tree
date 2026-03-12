@@ -1,0 +1,210 @@
+\documentclass{beamer}
+
+% import des packages
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{listofitems}
+\usepackage{graphicx}
+\usepackage{dirtree}
+\usepackage{chngcntr}
+\usepackage{etoolbox}
+\graphicspath{ {../../Code/data/plots} }
+\usepackage[outline]{contour}
+\contourlength{1pt}
+\usepackage[font={tiny}]{caption}
+\usepackage[font={tiny}]{subcaption}
+\usepackage{booktabs}
+
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{minted}
+
+% Set counter for figs
+\counterwithin{figure}{section}
+\counterwithin{figure}{subsection}
+
+\renewcommand{\thefigure}{\thesection.\thesubsection.\arabic{figure}}
+\pretocmd{\subsection}{\setcounter{figure}{0}}{}{}
+
+% Settings pgfplots
+\usepgfplotslibrary{colormaps}
+\usepgfplotslibrary{colorbrewer}
+\pgfplotsset{compat=newest}
+
+% Style pour tikz
+\tikzstyle{unit}=[draw, fill=white, shape=circle,inner sep=0.5,outer sep=0.6]
+\tikzstyle{label}=[font=\scriptsize, align=center]
+\tikzstyle{connect}=[]
+\def\nstyle{int(\lay<\Nnodlen?min(2,\lay):3)} % map layer number onto 1, 2, or 3
+
+% Style pour beamer
+\usefonttheme[onlymath]{serif}
+
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+
+\setbeamertemplate{section in toc}[sections numbered]
+\setbeamertemplate{subsection in toc}[subsections numbered]
+\setbeamertemplate{subsubsection in toc}[subsubsections numbered]
+% Auto outline at every section
+
+\AtBeginSubsection[]
+{
+  \begin{frame}<beamer>
+    \frametitle{Sommaire}
+    \tableofcontents[
+        currentsection,
+        currentsubsection,
+        subsectionstyle=show/shaded/hide
+    ]
+  \end{frame}
+}
+
+%Information to be included in the title page:
+\title{Arbre de décision}
+\author{Ludovic Huang, Augustin Grudet}
+\date{}
+
+\begin{document}
+
+% Page de titre
+\begin{frame}
+	\titlepage
+\end{frame}
+
+% Sommaire
+\begin{frame}
+	\frametitle{Sommaire}
+    \tableofcontents
+\end{frame}
+
+\section{Histoire des arbres de décisions}
+
+\begin{frame}
+	\frametitle{Exemple introductif, Ross Quinlan 1989}
+	But : construire une arbre de décision général en nous basant sur les observations ci-contre afin de savoir si on peut jouer au tennis.
+	\begin{table}[h]
+	\scriptsize
+    \centering
+        \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        \textbf{Outlook} & \textbf{Temperature} & \textbf{Humidity} & \textbf{Windy} & \textbf{Play} \\ \hline
+        Sunny    & Hot  & High   & False & No  \\ \hline
+        Sunny    & Hot  & High   & True  & No  \\ \hline
+        Overcast & Hot  & High   & False & Yes \\ \hline
+        Rainy    & Mild & High   & False & Yes \\ \hline
+        Rainy    & Cool & Normal & False & Yes \\ \hline
+        Rainy    & Cool & Normal & True  & No  \\ \hline
+        Overcast & Cool & Normal & True  & Yes \\ \hline
+        Sunny    & Mild & High   & False & No  \\ \hline
+        Sunny    & Cool & Normal & False & Yes \\ \hline
+        Rainy    & Mild & Normal & False & Yes \\ \hline
+        Sunny    & Mild & Normal & True  & Yes \\ \hline
+        Overcast & Mild & Normal & True  & Yes \\ \hline
+        Overcast & Hot  & Normal & False & Yes \\ \hline
+        Rainy    & Mild & High   & True  & No  \\ \hline
+        \end{tabular}
+    \caption{Dataset introductif de Ross Quinlan (1989)}
+    \end{table}
+\end{frame}
+
+\section{Construction d'arbre}
+\subsection{Principe de construction}
+\begin{frame}
+	\frametitle{Principe de construction}
+\end{frame}
+
+\begin{frame}
+    \frametitle{ID3 vs CART : Synthèse}
+    \begin{table}
+        \renewcommand{\arraystretch}{1.2}
+        \begin{tabular}{@{} lll @{}}
+            \toprule
+            \textbf{Caractéristique} & \textbf{ID3} & \textbf{CART} \\
+            \midrule
+            Critère & Entropie & Gini \\
+            Type d'arbre & Multi-branches & Binaire uniquement \\
+            Tâches & Classification & Classif. \& Régression \\
+            Élagage & Non & Oui (Pruning) \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+\subsection{Iterative Dichotomiser 3 (ID3)}
+\begin{frame}
+	\frametitle{Iterative Dichotomiser 3 (ID3)}
+	\begin{algorithm}[H]
+	\scriptsize
+    \caption{Algorithme ID3}
+    \begin{algorithmic}[1]
+        \Procedure{ID3}{$S, Attributes$}
+            \State Créer un nœud $Racine$
+            \If{tous les exemples de $S$ sont de la même classe $C$}
+                \State \Return $Racine$ étiqueté avec la classe $C$
+            \EndIf
+            \If{$Attributes$ est vide}
+                \State \Return $Racine$ étiqueté avec la classe majoritaire de $S$
+            \EndIf
+
+            \State \textbf{Sélection de l'attribut :}
+            \State $A \gets$ l'attribut qui maximise le \textbf{Gain d'Information}
+            \State Étiqueter $Racine$ par $A$
+
+            \For{chaque valeur possible $v$ de $A$}
+                \State $S_v \gets \{x \in S \mid x_A = v\}$
+                \If{$S_v$ est vide}
+                    \State Ajouter une feuille avec la classe majoritaire de $S$
+                \Else
+                    \State Ajouter le sous-arbre \Call{ID3}{$S_v, Attributes \setminus \{A\}$}
+                \EndIf
+            \EndFor
+            \State \Return $Racine$
+        \EndProcedure
+    \end{algorithmic}
+    \end{algorithm}
+\end{frame}
+
+\subsection{Classification and Regression Trees (CART)}
+\begin{frame}
+	\frametitle{Classification and Regression Trees (CART)}
+	\begin{algorithm}[H]
+	\scriptsize
+    \caption{Algorithme CART}
+    \begin{algorithmic}[1]
+        \Procedure{CART}{$D$}
+            \If{critère d'arrêt atteint (pureté, profondeur max, etc.)}
+                \State \Return nœud feuille avec la classe majoritaire
+            \EndIf
+
+            \State \textbf{Recherche de la séparation optimale :}
+            \State $(j, t) \gets \text{Trouver l'attribut } j \text{ et le seuil } t \text{ minimisant l'indice de \textbf{Gini}}$
+
+            \State \textbf{Division binaire :}
+            \State $D_{gauche} \gets \{x \in D \mid x_j \le t\}$
+            \State $D_{droite} \gets \{x \in D \mid x_j > t\}$
+
+            \State Créer un nœud $Racine$ divisé par le test $(x_j \le t)$
+            \State $Racine.gauche \gets$ \Call{CART}{$D_{gauche}$}
+            \State $Racine.droite \gets$ \Call{CART}{$D_{droite}$}
+
+            \State \Return $Racine$
+        \EndProcedure
+    \end{algorithmic}
+    \end{algorithm}
+\end{frame}
+
+\section{Élagage d'arbre}
+
+\begin{frame}
+	\frametitle{Test}
+\end{frame}
+
+\end{document}

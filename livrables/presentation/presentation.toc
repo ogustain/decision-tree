@@ -1,0 +1,6 @@
+\beamer@sectionintoc {1}{Histoire des arbres de décisions}{3}{0}{1}
+\beamer@sectionintoc {2}{Construction d'arbre}{4}{0}{2}
+\beamer@subsectionintoc {2}{1}{Principe de construction}{4}{0}{2}
+\beamer@subsectionintoc {2}{2}{Iterative Dichotomiser 3 (ID3)}{7}{0}{2}
+\beamer@subsectionintoc {2}{3}{Classification and Regression Trees (CART)}{9}{0}{2}
+\beamer@sectionintoc {3}{Élagage d'arbre}{11}{0}{3}
