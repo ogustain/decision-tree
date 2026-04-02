@@ -9,7 +9,7 @@
 \usepackage{dirtree}
 \usepackage{chngcntr}
 \usepackage{etoolbox}
-\graphicspath{ {../../Code/data/plots} }
+\graphicspath{ {../../code/data/plots/} }
 \usepackage[outline]{contour}
 \contourlength{1pt}
 \usepackage[font={tiny}]{caption}
@@ -88,8 +88,18 @@
 \section{Histoire des arbres de décisions}
 
 \begin{frame}
+	\frametitle{Contexte et objectif}
+	\begin{itemize}
+		\item Problème : prédire une décision à partir d'observations.
+		\item Idée : une suite de tests simples et interprétables.
+		\item Avantages : explicable, rapide à entraîner, baseline solide.
+		\item Objectif : comprendre ID3 et CART, critères de split, élagage.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
 	\frametitle{Exemple introductif, Ross Quinlan 1989}
-	But : construire une arbre de décision général en nous basant sur les observations ci-contre afin de savoir si on peut jouer au tennis.
+	But : construire un arbre de décision général en nous basant sur les observations ci-contre afin de savoir si on peut jouer au tennis.
 	\begin{table}[h]
 	\scriptsize
     \centering
@@ -119,6 +129,29 @@
 \subsection{Principe de construction}
 \begin{frame}
 	\frametitle{Principe de construction}
+	\begin{itemize}
+		\item À chaque nœud, choisir un attribut pour séparer les classes.
+		\item Le choix maximise un critère de pureté (entropie, Gini).
+		\item Répéter jusqu'à un critère d'arrêt.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Critères de pureté}
+	\begin{itemize}
+		\item Entropie : $H(S) = -\sum_i p_i \log_2(p_i)$
+		\item Gain d'information : $IG(S, A) = H(S) - \sum_v \frac{|S_v|}{|S|} H(S_v)$
+		\item Gini : $G(S) = 1 - \sum_i p_i^2$
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Attributs continus}
+	\begin{itemize}
+		\item Pour un attribut numérique, tester des seuils $t$.
+		\item On cherche le split binaire qui minimise Gini ou maximise le gain.
+		\item CART gère nativement le numérique, ID3 nécessite une adaptation.
+	\end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -172,6 +205,24 @@
     \end{algorithm}
 \end{frame}
 
+\begin{frame}
+	\frametitle{ID3 sur l'exemple météo (Quinlan 1989)}
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.9\textwidth]{id3_weather_tree.png}
+		\caption{Arbre ID3 appris sur le dataset météo.}
+	\end{figure}
+\end{frame}
+
+\begin{frame}
+	\frametitle{ID3 sur Drug200 (variables catégorielles)}
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.9\textwidth]{id3_drug200_tree.png}
+		\caption{Arbre ID3 après suppression des variables continues (Age, Na\_to\_K).}
+	\end{figure}
+\end{frame}
+
 \subsection{Classification and Regression Trees (CART)}
 \begin{frame}
 	\frametitle{Classification and Regression Trees (CART)}
@@ -204,7 +255,42 @@
 \section{Élagage d'arbre}
 
 \begin{frame}
-	\frametitle{Test}
+	\frametitle{Pourquoi élaguer ?}
+	\begin{itemize}
+		\item Un arbre profond sur-apprend facilement.
+		\item L'élagage réduit la variance et améliore la généralisation.
+		\item Compromis : complexité vs performance.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Post-pruning (CART)}
+	\begin{itemize}
+		\item Construire l'arbre complet.
+		\item Remplacer des sous-arbres par des feuilles si le score ne baisse pas.
+		\item Coût-complexité : $R_\alpha(T) = R(T) + \alpha |T|$.
+	\end{itemize}
+\end{frame}
+
+\section{Limites et conclusion}
+
+\begin{frame}
+	\frametitle{Limites}
+	\begin{itemize}
+		\item Sensible au bruit et aux petites variations des données.
+		\item Biais vers des attributs à nombreuses valeurs (ID3).
+		\item Solutions : élagage, critères pénalisés, ensembles (Random Forest).
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Conclusion}
+	\begin{itemize}
+		\item Les arbres : interprétables et efficaces.
+		\item ID3 : simple, entropie, multi-branches.
+		\item CART : binaire, Gini, gère les variables continues + pruning.
+		\item Perspectives : ensembles pour améliorer la robustesse.
+	\end{itemize}
 \end{frame}
 
 \end{document}
